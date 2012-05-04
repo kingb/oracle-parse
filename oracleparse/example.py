@@ -23,7 +23,7 @@ class ExampleRecord(object):
     """
     This represents a set of fields (a "row") in the imaginary spreadsheet.
     """
-    
+
     def __init__(self, fields=None):
         """
         fields: A list of associated ExampleFields.
@@ -32,12 +32,17 @@ class ExampleRecord(object):
             self.fields = fields
         else:
             self.fields = []
-    
+
+    def add_field(self, name, example):
+        field = ExampleField(name, example)
+        self.fields.append(field)
+
+
 class ExampleCollection(object):
     """
     This represents the sum total of the scraped data (the entire spreadsheet, as it were) in the imaginary spreadsheet.
     """
-    
+
     def __init__(self, records=None):
         """
         records: A list of associated ExampleRecords.
@@ -45,7 +50,7 @@ class ExampleCollection(object):
         if records:
             self.records = records
         else:
-            self.records= []
+            self.records = []
 
 def example_to_node(field, page_url, strip=False, disambiguation_method=take_last):
     """
@@ -61,7 +66,6 @@ def example_to_node(field, page_url, strip=False, disambiguation_method=take_las
     else:
         target_nodes = [ node for node in root.iterdescendants() if node.text_content() == field.example ]
     if len(target_nodes) == 0:
-        raise ValueError('Node containing the given example not found.')
+        raise ValueError('Node containing the given example not found. Field(%s)' % (field.name))
     else:
         return disambiguation_method(target_nodes)
-    
