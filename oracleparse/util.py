@@ -3,9 +3,8 @@ from urllib2 import urlopen
 
 def url_to_DOM(url):
     """
-    url: url to html,
-    
-    returns DOM of html
+    Returns the DOM of the HTML at the given URL.
+    url: url of the page we're interested in.
     """
     www = urlopen(url)
     html = www.read()
@@ -15,7 +14,8 @@ def url_to_DOM(url):
 
 def node_to_absolute_XPATH(node):
     """
-    Returns an absolute XPATH for a node
+    Returns an absolute XPATH for a given DOM node.
+    node: The target node whose absolute XPATH we want.
     """
     def helper(node, current_list):
         if current_list is None:
