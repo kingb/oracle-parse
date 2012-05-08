@@ -40,9 +40,9 @@ class Oracle(object):
         # parse the DOM for each field and store the data
         for field in fields[1:]:
             target_node = example.example_to_node(field, self.url, strip)
-            datapath = util.node_to_absolute_XPATH(target_node)
+            #datapath = util.node_to_absolute_XPATH(target_node)
 
-            data = root.findall(datapath)
+            data = root.findall(field.xpath)
 
             for index in range(len(data)):
                 records[index][field.name] = data[index].text
