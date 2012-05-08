@@ -18,6 +18,7 @@ class ExampleField(object):
         """
         self.name = name
         self.example = example
+        self.xpath = None
 
 class ExampleRecord(object):
     """
