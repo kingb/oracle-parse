@@ -98,3 +98,24 @@ def get_xpath_index(node):
     #return the xpath index
     return children.index(node) + 1
 
+
+def text_filter_strip_newline(text):
+    """
+    text_filter function:
+     * strips trailing/leading whitespace
+     * removes newline characters.
+    """
+    def no_double_whitespace(text):
+        """
+        All spaces should be a single space
+        """
+        prev_len = len(text)
+        cur_len = -1
+        while prev_len != cur_len:
+            prev_len = len(text)
+            text = text.replace('  ', ' ')
+            cur_len = len(text)
+
+        return text
+
+    return no_double_whitespace(text.strip().replace('\r\n', ' ').replace('\n', ' ').replace('\r', ' '))

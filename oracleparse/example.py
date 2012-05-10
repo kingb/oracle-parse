@@ -3,7 +3,7 @@ Created on May 3, 2012
 
 @authors: Brandon King & Omar Rehmane
 """
-from util import url_to_DOM
+from util import url_to_DOM, text_filter_strip_newline
 from disambiguation import take_last
 
 class ExampleField(object):
@@ -53,17 +53,20 @@ class ExampleCollection(object):
         else:
             self.records = []
 
-def example_to_node(field, page_url, strip=False, disambiguation_method=take_last):
+def example_to_node(field, page_url, filter=False, disambiguation_method=take_last,
+                    text_filter_func=text_filter_strip_newline):
     """
     This method takes in an ExampleField and finds the target node that contains that example.
     field: An ExampleField.
     page_url: The URL of the selected page.
-    strip: If whitespace should be stripped from the end of the html and the example.
+    filter: If text_filter_func shold be applied to text before comparison.
     disambiguation_method: This should be a method that takes in a list and somehow decides which node to return.
+    text_filter_func: Allows the user to supply a function for filtering text.
+        default: util.text_filter_strip_newline (removes surrounding whitespace and replaces newlines with ''
     """
     root = url_to_DOM(page_url)
-    if strip:
-        target_nodes = [ node for node in root.iterdescendants() if node.text_content().strip() == field.example.strip() ]
+    if filter:
+        target_nodes = [ node for node in root.iterdescendants() if text_filter_func(node.text_content()) == text_filter_func(field.example) ]
     else:
         target_nodes = [ node for node in root.iterdescendants() if node.text_content() == field.example ]
     if len(target_nodes) == 0:

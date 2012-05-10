@@ -10,5 +10,7 @@ record.add_field('address', '439 Park Avenue')
 record.add_field('time', '7:30 P.M.')
 
 sybil = oracle.Oracle(record, 'https://sites.google.com/a/maineafg.org/ais/Monday-Meetings')
+data = sybil.parse(strip=True)
+
 pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(sybil.parse(strip=True))
+pp.pprint(data)
