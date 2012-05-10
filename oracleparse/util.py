@@ -77,10 +77,12 @@ def disambiguate_xpath(node1, node2, index_tags=INDEXED_TAGS):
     node1_list = []
     node2_list = []
     helper(node1, node1_list, node2, node2_list)
-    print node1_list
-    print node2_list
+    #print node1_list
+    #print node2_list
     xpath1 = '/'.join(node1_list)
     xpath2 = '/'.join(node2_list)
+    #print xpath1
+    #print xpath2
     return (xpath1, xpath2)
 
 

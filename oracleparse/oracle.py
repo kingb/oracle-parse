@@ -19,22 +19,27 @@ class Oracle(object):
     def parse(self, strip=False, index_tags=util.INDEXED_TAGS):
         fields = self.example_record.fields
 
+        # PASS 1: XPath disambiguation
+        self._disambiguate(strip, index_tags)
+
         records = []
 
         start_field = fields[0]
 
         root = util.url_to_DOM(self.url)
 
-        target_node = example.example_to_node(start_field, self.url, strip)
-        datapath = util.node_to_absolute_XPATH(target_node)
+        #target_node = example.example_to_node(start_field, self.url, strip)
+        #datapath = util.node_to_absolute_XPATH(target_node)
 
-        start_data = root.findall(datapath)
+        start_data = root.findall(start_field.xpath)
+        print "Field (start): %s" % (start_field.name)
+        print "  XPath: %s" % (start_field.xpath)
+        print "  Data Count: %d" % (len(start_data))
 
         for datum in start_data:
             records.append({start_field.name: datum.text})
 
-        # PASS 1: XPath disambiguation
-        self._disambiguate(strip, index_tags)
+
 
 
         # parse the DOM for each field and store the data
@@ -43,6 +48,10 @@ class Oracle(object):
             #datapath = util.node_to_absolute_XPATH(target_node)
 
             data = root.findall(field.xpath)
+
+            print "Field: %s" % (field.name)
+            print "  XPath: %s" % (field.xpath)
+            print "  Data Count: %d" % (len(data))
 
             for index in range(len(data)):
                 records[index][field.name] = data[index].text
