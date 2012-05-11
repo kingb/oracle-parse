@@ -1,10 +1,15 @@
+import pprint
+
 from oracleparse import example
 from oracleparse import oracle
 
-field1 = example.ExampleField('song-title', 'Call Me Maybe')
-field2 = example.ExampleField('artist', 'Gotye')
+record = example.ExampleRecord()
+record.add_field('song-title', 'Call Me Maybe')
+record.add_field('artist', 'Gotye')
 
-record = example.ExampleRecord([field1, field2])
 
 sybil = oracle.Oracle(record, 'http://www.apple.com/itunes/charts/songs/')
-print sybil.parse()
+data = sybil.parse()
+
+pp = pprint.PrettyPrinter(indent=4)
+pp.pprint(data)
