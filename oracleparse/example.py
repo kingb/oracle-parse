@@ -3,7 +3,7 @@ Created on May 3, 2012
 
 @authors: Brandon King & Omar Rehmane
 """
-from util import url_to_DOM, text_filter_strip_newline, node_to_absolute_XPATH
+from util import url_to_DOM, text_filter_strip_newline, node_to_absolute_XPATH, DEFAULT_USER_AGENT
 from disambiguation import take_last
 
 class ExampleField(object):
@@ -74,11 +74,11 @@ def example_to_node(field, page_url, filter=False, disambiguation_method=take_la
     else:
         return disambiguation_method(target_nodes)
 
-def examples_to_nodes(field_list, page_url, text_filter_func=text_filter_strip_newline):
+def examples_to_nodes(field_list, page_url, text_filter_func=text_filter_strip_newline, user_agent=DEFAULT_USER_AGENT):
     """
     For each field, set the selected node.
     """
-    root = url_to_DOM(page_url)
+    root = url_to_DOM(page_url, user_agent)
     d = {}
     for field in field_list:
         target_nodes = [ node for node in root.iterdescendants() \
@@ -92,8 +92,8 @@ def examples_to_nodes(field_list, page_url, text_filter_func=text_filter_strip_n
 
     return d
 
-def node_selection(field_list, url):
-    d = examples_to_nodes(field_list, url)
+def node_selection(field_list, url, user_agent=DEFAULT_USER_AGENT):
+    d = examples_to_nodes(field_list, url, user_agent=user_agent)
 
     d_xpath_count = {}
     d_count = {}

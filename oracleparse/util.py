@@ -1,14 +1,17 @@
 from lxml.html import soupparser
-from urllib2 import urlopen
+from urllib2 import urlopen, build_opener
 
 INDEXED_TAGS = ['table']
+DEFAULT_USER_AGENT = "OracleParse/0.1"
 
-def url_to_DOM(url):
+def url_to_DOM(url, user_agent=DEFAULT_USER_AGENT):
     """
     Returns the DOM of the HTML at the given URL.
     url: url of the page we're interested in.
     """
-    www = urlopen(url)
+    builder = build_opener()
+    builder.addheaders = [("User-agent", user_agent)]
+    www = builder.open(url)
     html = www.read()
 
     return soupparser.fromstring(html)

@@ -16,11 +16,12 @@ class Oracle(object):
     # TODO methods we need
     # method to disambiguate between fields in case of Xpath collision
 
-    def parse(self, strip=False, index_tags=util.INDEXED_TAGS, disambiguate_func=disambiguation.take_last):
+    def parse(self, strip=False, index_tags=util.INDEXED_TAGS, disambiguate_func=disambiguation.take_last,
+              user_agent=util.DEFAULT_USER_AGENT):
         fields = self.example_record.fields
 
         # PASS 0: Select Nodes
-        selected_nodes = example.node_selection(fields, self.url)
+        selected_nodes = example.node_selection(fields, self.url, user_agent=user_agent)
         for field in fields:
             node, xpath, count = disambiguate_func(selected_nodes[field.name])
             field.node = node
