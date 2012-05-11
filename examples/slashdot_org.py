@@ -5,8 +5,8 @@ from oracleparse import example
 from oracleparse import oracle
 
 record = example.ExampleRecord([])
-#record.add_field('title', "USPS To Ban International Shipping On Lithium Ion Powered Gadgetry")
-record.add_field("abstract", '''"Apparently the USPS is enacting a ban on the international shipment of all devices containing Lithium Ion batteries. The ban is expected to lift in January of 2013. It seems like this would drive more business away from the already floundering USPS financial situation. The article focuses on the shipment of items out of the U.S., but doesn't mention whether the same ban will apply to purchasing these items on eBay from overseas sources."''')
+record.add_field('title', "ESA Declares Flagship Envisat Observing Satellite Lost")
+record.add_field('abstract', u"""An anonymous reader writes with news that the European Space Agency has lost contact with its Envisat environmental satellite mere weeks after celebrating a full decade in orbit. Engineers have spent the last month trying to re-establish contact, and will continue to do so for another two months. "With ten sophisticated sensors, Envisat has observed and monitored Earth’s land, atmosphere, oceans and ice caps during its ten-year lifetime, delivering over a thousand terabytes of data. An estimated 2500 scientific publications so far have been based on this information, furthering our knowledge of the planet." The ESA was hoping Envisat would stay operational for another two years, until Sentinel satellites from the Global Monitoring for Environment and Security initiative became operational.""")
 
 sybil = oracle.Oracle(record, 'http://slashdot.org/')
 data = sybil.parse(strip=True)
