@@ -1,4 +1,4 @@
-from oracleparse import util, example
+from oracleparse import util, example, disambiguation
 
 class Oracle(object):
     """
@@ -16,14 +16,22 @@ class Oracle(object):
     # TODO methods we need
     # method to disambiguate between fields in case of Xpath collision
 
-    def parse(self, strip=False, index_tags=util.INDEXED_TAGS):
+    def parse(self, strip=False, index_tags=util.INDEXED_TAGS, disambiguate_func=disambiguation.take_last):
         fields = self.example_record.fields
 
-        # PASS 1: XPath disambiguation
+        # PASS 0: Select Nodes
+        selected_nodes = example.node_selection(fields, self.url)
+        for field in fields:
+            node, xpath, count = disambiguate_func(selected_nodes[field.name])
+            field.node = node
+            field.xpath = xpath
+
+        # PASS 1: Cross-field XPath disambiguation
         self._disambiguate(strip, index_tags)
 
-        records = []
 
+        # PASS 2: Collect up selected data
+        records = []
         start_field = fields[0]
 
         root = util.url_to_DOM(self.url)
@@ -37,9 +45,7 @@ class Oracle(object):
         print "  Data Count: %d" % (len(start_data))
 
         for datum in start_data:
-            records.append({start_field.name: datum.text})
-
-
+            records.append({start_field.name: datum.text_content()})
 
 
         # parse the DOM for each field and store the data
@@ -54,7 +60,7 @@ class Oracle(object):
             print "  Data Count: %d" % (len(data))
 
             for index in range(len(data)):
-                records[index][field.name] = data[index].text
+                records[index][field.name] = data[index].text_content()
 
         return records
 
@@ -68,8 +74,8 @@ class Oracle(object):
 
         disambig = {}
         for field in fields:
-            field.node = example.example_to_node(field, self.url, strip)
-            field.xpath = util.node_to_absolute_XPATH(field.node, index_tags)
+            #field.node = example.example_to_node(field, self.url, strip)
+            #field.xpath = util.node_to_absolute_XPATH(field.node, index_tags)
             disambig.setdefault(field.xpath, []).append(field)
 
         for xpath, field_list in disambig.items():
